@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StudySprout — Project Card</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --page-bg: #f6f7f2;
+    --ink: #24312a;
+    --ink-soft: #5a6b5f;
+    --card-bg: #ffffff;
+    --border: #dfe5da;
+    --green-deep: #4a6741;
+    --green-mid: #6f8a63;
+    --green-pale: #e9efdd;
+    --cream: #eef0e4;
+    --soil: #cdbA9b;
+    --chip-bg: #f0f4ea;
+    --chip-border: #d7e0cc;
+    --red: #ff5f57;
+    --yellow: #febc2e;
+    --green-dot: #28c840;
+    --shadow: 0 18px 45px rgba(36, 49, 42, 0.14), 0 4px 12px rgba(36, 49, 42, 0.08);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--page-bg);
+    font-family: 'Inter', system-ui, sans-serif;
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 48px 20px;
+  }
+
+  /* ============ THE CARD ============ */
+  .project-card {
+    width: 100%;
+    max-width: 680px;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease;
+  }
+  .project-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 28px 60px rgba(36, 49, 42, 0.18), 0 6px 16px rgba(36, 49, 42, 0.1);
+  }
+
+  /* ============ macOS TITLE BAR ============ */
+  .titlebar {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 16px;
+    background: linear-gradient(#fbfbf9, #f2f3ee);
+    border-bottom: 1px solid var(--border);
+  }
+  .traffic-lights { display: flex; gap: 8px; flex-shrink: 0; }
+  .dot {
+    width: 12px; height: 12px; border-radius: 50%;
+    border: 0.5px solid rgba(0,0,0,0.12);
+    position: relative;
+  }
+  .dot.red    { background: var(--red); }
+  .dot.yellow { background: var(--yellow); }
+  .dot.green  { background: var(--green-dot); }
+  .dot span {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 8px; font-weight: 700; color: rgba(0,0,0,0.5);
+    opacity: 0; transition: opacity 0.15s ease;
+    line-height: 1;
+  }
+  .traffic-lights:hover .dot span { opacity: 1; }
+
+  .url-bar {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    background: #eceee7;
+    border: 1px solid #e0e3d9;
+    border-radius: 8px;
+    padding: 6px 12px;
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    min-width: 0;
+  }
+  .url-bar .lock { font-size: 10px; }
+  .url-bar .url {
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .url-bar .url b { color: var(--ink); font-weight: 600; }
+
+  /* ============ WINDOW CONTENT: mini app preview ============ */
+  .preview {
+    display: flex;
+    height: 240px;
+    background: var(--cream);
+    font-family: 'Silkscreen', monospace;
+    overflow: hidden;
+    user-select: none;
+  }
+  .mini-sidebar {
+    width: 148px;
+    background: var(--green-deep);
+    color: #eaf0e2;
+    padding: 16px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+  .mini-logo {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    margin-bottom: 14px;
+  }
+  .mini-logo em { font-style: normal; font-size: 11px; }
+  .mini-nav {
+    font-size: 8px;
+    letter-spacing: 0.5px;
+    padding: 7px 8px;
+    border-radius: 6px;
+    opacity: 0.85;
+  }
+  .mini-nav.active {
+    background: rgba(255,255,255,0.18);
+    opacity: 1;
+  }
+
+  .mini-main {
+    flex: 1;
+    padding: 14px 18px;
+    min-width: 0;
+  }
+  .mini-xp-label {
+    font-size: 7px;
+    letter-spacing: 1px;
+    color: var(--ink-soft);
+    margin-bottom: 4px;
+  }
+  .mini-xp-track {
+    height: 10px;
+    background: #ffffff;
+    border: 1px solid var(--green-mid);
+    border-radius: 5px;
+    overflow: hidden;
+    margin-bottom: 14px;
+  }
+  .mini-xp-fill {
+    height: 100%;
+    width: 34%;
+    background: linear-gradient(90deg, var(--green-mid), #8aa87a);
+    border-radius: 4px;
+    animation: grow 2.4s ease forwards;
+  }
+  @keyframes grow { from { width: 6%; } to { width: 34%; } }
+  @media (prefers-reduced-motion: reduce) {
+    .mini-xp-fill { animation: none; }
+    .project-card, .project-card:hover { transform: none; transition: none; }
+  }
+
+  .mini-title {
+    font-size: 12px;
+    color: var(--ink);
+    margin-bottom: 2px;
+  }
+  .mini-sub {
+    font-size: 7px;
+    letter-spacing: 1px;
+    color: var(--ink-soft);
+    margin-bottom: 12px;
+  }
+
+  .mini-plots {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+  .plot {
+    aspect-ratio: 1.35;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    font-size: 7px;
+    letter-spacing: 0.5px;
+    color: var(--ink-soft);
+    text-align: center;
+  }
+  .plot.growing {
+    background: #f2efe4;
+    border: 1.5px solid var(--green-mid);
+  }
+  .plot.growing .sprout { font-size: 20px; }
+  .plot.empty {
+    background: var(--soil);
+    border: 1.5px dashed rgba(74, 103, 65, 0.55);
+    color: rgba(45, 58, 42, 0.65);
+  }
+  .plot.empty .plus { font-size: 14px; }
+
+  /* ============ PROJECT INFO ============ */
+  .info { padding: 26px 28px 28px; }
+  .info-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 6px;
+  }
+  .info h2 {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+  }
+  .info h2 .leaf { font-size: 18px; }
+  .tagline {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--green-mid);
+    letter-spacing: 0.2px;
+  }
+  .desc {
+    font-size: 14.5px;
+    line-height: 1.6;
+    color: var(--ink-soft);
+    margin: 10px 0 18px;
+  }
+
+  .tech-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 10px;
+  }
+  .tech-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 22px;
+  }
+  .chip {
+    font-size: 12px;
+    font-weight: 500;
+    padding: 5px 12px;
+    border-radius: 999px;
+    background: var(--chip-bg);
+    border: 1px solid var(--chip-border);
+    color: var(--ink);
+  }
+
+  .links { display: flex; gap: 10px; flex-wrap: wrap; }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13.5px;
+    font-weight: 600;
+    text-decoration: none;
+    padding: 10px 18px;
+    border-radius: 10px;
+    transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+  }
+  .btn:active { transform: scale(0.97); }
+  .btn.primary {
+    background: var(--green-deep);
+    color: #f2f6ec;
+  }
+  .btn.primary:hover { background: #3c5535; }
+  .btn.ghost {
+    background: transparent;
+    color: var(--ink);
+    border: 1.5px solid var(--border);
+  }
+  .btn.ghost:hover { border-color: var(--green-mid); }
+  .btn svg { width: 16px; height: 16px; }
+
+  @media (max-width: 520px) {
+    .mini-sidebar { display: none; }
+    .preview { height: 210px; }
+    .info { padding: 22px 20px 24px; }
+  }
+
+  /* ===== Dark mode (driven by the portfolio theme toggle) ===== */
+  :root[data-theme="dark"] {
+    --page-bg: #14161c;
+    --ink: #f3f4f8;
+    --ink-soft: #a7adc2;
+    --card-bg: #1b1e27;
+    --border: #2b2f3b;
+    --chip-bg: #232734;
+    --chip-border: #363c4b;
+    --shadow: 0 18px 45px rgba(0, 0, 0, 0.55), 0 4px 12px rgba(0, 0, 0, 0.4);
+  }
+  :root[data-theme="dark"] body { background: var(--page-bg); }
+  :root[data-theme="dark"] .titlebar {
+    background: linear-gradient(#20242f, #171a22);
+  }
+  :root[data-theme="dark"] .url-bar {
+    background: #12141b;
+    border-color: #2b2f3b;
+  }
+
+  /* ===== embedded alignment + Farsi info (i18n-embed) ===== */
+  body { align-items: flex-start; padding-top: 28px; padding-bottom: 28px; }
+  body.lang-fa .info { direction: rtl; text-align: right; font-family: 'Vazirmatn', 'Inter', sans-serif; }
+  body.lang-fa .info h2 { font-family: 'Vazirmatn', 'Inter', sans-serif; }
+</style>
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<article class="project-card">
+
+  <!-- macOS browser chrome -->
+  <div class="titlebar">
+    <div class="traffic-lights" aria-hidden="true">
+      <div class="dot red"><span>×</span></div>
+      <div class="dot yellow"><span>−</span></div>
+      <div class="dot green"><span>+</span></div>
+    </div>
+    <div class="url-bar">
+      <span class="lock">🔒</span>
+      <span class="url"><b>studysprout.pages.dev</b></span>
+    </div>
+  </div>
+
+  <!-- Window content: mini recreation of the garden UI -->
+  <div class="preview" aria-label="Preview of the StudySprout garden dashboard">
+    <div class="mini-sidebar">
+      <div class="mini-logo">StudySprout <em>🌱</em></div>
+      <div class="mini-nav active">🌱 MY GARDEN</div>
+      <div class="mini-nav">⏱ STUDY TIMER</div>
+      <div class="mini-nav">📖 MY SHELF</div>
+    </div>
+    <div class="mini-main">
+      <div class="mini-xp-label">TOTAL XP</div>
+      <div class="mini-xp-track"><div class="mini-xp-fill"></div></div>
+      <div class="mini-title">🌱 GIGIN'S GARDEN</div>
+      <div class="mini-sub">YOUR FOCUS, YOUR GARDEN</div>
+      <div class="mini-plots">
+        <div class="plot growing"><span class="sprout">🌷</span>GROWING</div>
+        <div class="plot growing"><span class="sprout">🌵</span>GROWING</div>
+        <div class="plot empty"><span class="plus">+</span>TAP TO PLANT</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Project info -->
+  <div class="info">
+    <div class="info-head">
+      <h2><span class="leaf">🌱</span> StudySprout</h2>
+      <span class="tagline" data-fa="تمرکزت را پرورش بده. جلسه‌به‌جلسه.">Grow your focus. One session at a time.</span>
+    </div>
+    <p class="desc" data-fa="یک اپلیکیشن بهره‌وریِ بازی‌گونه که زمان مطالعهٔ متمرکز را به یک باغ مجازیِ شکوفا تبدیل می‌کند. با کامل‌کردن جلسه‌های پومودورو XP بگیر، گیاهان یکتا پرورش بده، گونه‌های کمیاب را با استریک‌های روزانه باز کن و برداشتت را در قفسهٔ شخصی به‌نمایش بگذار.">
+      A gamified productivity app that turns focused study time into a flourishing virtual
+      garden. Complete Pomodoro sessions to earn XP, grow unique plants, unlock rare species
+      through daily streaks, and showcase your harvest on a personal shelf.
+    </p>
+
+    <div class="tech-label" data-fa="ساخته‌شده با">Built with</div>
+    <div class="tech-chips">
+      <span class="chip">React 19</span>
+      <span class="chip">Vite</span>
+      <span class="chip">Tailwind CSS</span>
+      <span class="chip">Framer Motion</span>
+      <span class="chip">shadcn/ui</span>
+      <span class="chip">Node.js</span>
+      <span class="chip">Express</span>
+      <span class="chip">MongoDB</span>
+      <span class="chip">JWT Auth</span>
+      <span class="chip">Zod</span>
+    </div>
+
+    <div class="links">
+      <a class="btn primary" href="https://studysprout.pages.dev" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        <span data-fa="نسخهٔ زنده">Live Demo</span>
+      </a>
+      <a class="btn ghost" href="https://github.com/imgigin2003/StudySprout" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.55 0-.27-.01-1.17-.02-2.12-3.2.7-3.88-1.36-3.88-1.36-.52-1.33-1.28-1.68-1.28-1.68-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.72-1.54-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.28 1.18-3.09-.12-.29-.51-1.46.11-3.04 0 0 .96-.31 3.15 1.18a10.9 10.9 0 0 1 5.74 0c2.19-1.49 3.15-1.18 3.15-1.18.62 1.58.23 2.75.11 3.04.74.81 1.18 1.83 1.18 3.09 0 4.42-2.7 5.39-5.27 5.68.41.36.78 1.06.78 2.14 0 1.54-.02 2.79-.02 3.17 0 .31.21.67.8.55A11.51 11.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/></svg>
+        <span data-fa="گیت‌هاب">GitHub</span>
+      </a>
+    </div>
+  </div>
+
+</article>
+
+<script>
+(function () {
+  var root = document.documentElement,
+    body = document.body;
+  function apply() {
+    var fa = root.getAttribute("lang") === "fa";
+    body.classList.toggle("lang-fa", fa);
+    var els = document.querySelectorAll("[data-fa]");
+    for (var i = 0; i < els.length; i++) {
+      var el = els[i];
+      if (el.getAttribute("data-en-html") === null) {
+        el.setAttribute("data-en-html", el.innerHTML);
+      }
+      el.innerHTML = fa ? el.getAttribute("data-fa") : el.getAttribute("data-en-html");
+    }
+  }
+  new MutationObserver(apply).observe(root, { attributes: true, attributeFilter: ["lang"] });
+  apply();
+})();
+</script>
+
+</body>
+</html>

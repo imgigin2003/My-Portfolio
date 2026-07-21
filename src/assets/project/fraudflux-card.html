@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FraudFlux — Project Card</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --page-bg: #f6f7f2;
+    --ink: #1a2030;
+    --ink-soft: #606a80;
+    --card-bg: #ffffff;
+    --border: #e2e5ec;
+    --console: #0e1526;
+    --console-panel: #16203a;
+    --console-line: #223052;
+    --console-text: #c6d2ea;
+    --console-dim: #6c7ba0;
+    --ok: #34d399;
+    --fraud: #f87171;
+    --amber: #fbbf24;
+    --accent: #4f6ef7;
+    --accent-deep: #3853d8;
+    --chip-bg: #eff2fb;
+    --chip-border: #dde3f5;
+    --red: #ff5f57;
+    --yellow: #febc2e;
+    --green-dot: #28c840;
+    --shadow: 0 18px 45px rgba(26, 32, 48, 0.14), 0 4px 12px rgba(26, 32, 48, 0.08);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--page-bg);
+    font-family: 'Inter', system-ui, sans-serif;
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 48px 20px;
+  }
+
+  /* ============ THE CARD ============ */
+  .project-card {
+    width: 100%;
+    max-width: 680px;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease;
+  }
+  .project-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 28px 60px rgba(26, 32, 48, 0.18), 0 6px 16px rgba(26, 32, 48, 0.1);
+  }
+
+  /* ============ macOS TITLE BAR ============ */
+  .titlebar {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 16px;
+    background: linear-gradient(#fbfcfd, #f1f3f7);
+    border-bottom: 1px solid var(--border);
+  }
+  .traffic-lights { display: flex; gap: 8px; flex-shrink: 0; }
+  .dot {
+    width: 12px; height: 12px; border-radius: 50%;
+    border: 0.5px solid rgba(0,0,0,0.12);
+    position: relative;
+  }
+  .dot.red    { background: var(--red); }
+  .dot.yellow { background: var(--yellow); }
+  .dot.green  { background: var(--green-dot); }
+  .dot span {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 8px; font-weight: 700; color: rgba(0,0,0,0.5);
+    opacity: 0; transition: opacity 0.15s ease;
+    line-height: 1;
+  }
+  .traffic-lights:hover .dot span { opacity: 1; }
+
+  .url-bar {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    background: #eef0f5;
+    border: 1px solid #e2e5ec;
+    border-radius: 8px;
+    padding: 6px 12px;
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    min-width: 0;
+  }
+  .url-bar .lock { font-size: 10px; }
+  .url-bar .url {
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .url-bar .url b { color: var(--ink); font-weight: 600; }
+
+  /* ============ WINDOW CONTENT: imaginary fraud console ============ */
+  .preview {
+    height: 250px;
+    background:
+      radial-gradient(ellipse 70% 60% at 85% 0%, rgba(79, 110, 247, 0.16), transparent 60%),
+      var(--console);
+    padding: 15px 18px;
+    overflow: hidden;
+    user-select: none;
+    font-family: 'JetBrains Mono', monospace;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .fx-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .fx-brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 13px;
+    font-family: 'Inter', sans-serif;
+    letter-spacing: -0.2px;
+  }
+  .fx-live {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 8.5px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: var(--ok);
+    background: rgba(52, 211, 153, 0.1);
+    border: 1px solid rgba(52, 211, 153, 0.35);
+    padding: 4px 10px;
+    border-radius: 999px;
+  }
+  .fx-live .d {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--ok);
+    animation: blink 1.4s ease-in-out infinite;
+  }
+  @keyframes blink { 50% { opacity: 0.25; } }
+
+  .fx-feed {
+    flex: 1;
+    background: var(--console-panel);
+    border: 1px solid var(--console-line);
+    border-radius: 10px;
+    padding: 9px 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    min-height: 0;
+  }
+  .fx-cols {
+    display: flex;
+    font-size: 7px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: var(--console-dim);
+    padding-bottom: 3px;
+    border-bottom: 1px solid var(--console-line);
+  }
+  .fx-row {
+    display: flex;
+    align-items: center;
+    font-size: 8.5px;
+    color: var(--console-text);
+    padding: 3px 0;
+    opacity: 0;
+    animation: arrive 8s linear infinite;
+  }
+  .fx-row:nth-child(2) { animation-delay: 0s; }
+  .fx-row:nth-child(3) { animation-delay: 1.1s; }
+  .fx-row:nth-child(4) { animation-delay: 2.2s; }
+  .fx-row:nth-child(5) { animation-delay: 3.3s; }
+  .fx-row:nth-child(6) { animation-delay: 4.4s; }
+  @keyframes arrive {
+    0%   { opacity: 0; transform: translateY(-3px); }
+    6%   { opacity: 1; transform: translateY(0); }
+    92%  { opacity: 1; }
+    100% { opacity: 0; }
+  }
+  .c-id  { width: 22%; color: var(--console-dim); }
+  .c-amt { width: 26%; }
+  .c-pr  { width: 26%; }
+  .c-v   { width: 26%; text-align: right; }
+  .v-ok    { color: var(--ok); font-weight: 700; }
+  .v-fraud {
+    color: var(--fraud);
+    font-weight: 700;
+    animation: alarm 8s linear infinite;
+    animation-delay: inherit;
+  }
+  .fx-row.hot { background: rgba(248, 113, 113, 0.07); border-radius: 5px; }
+  @keyframes alarm {
+    6%, 10%, 14% { text-shadow: 0 0 8px rgba(248, 113, 113, 0.9); }
+    8%, 12%      { text-shadow: none; }
+  }
+
+  .fx-stats {
+    display: flex;
+    gap: 8px;
+  }
+  .fx-stat {
+    flex: 1;
+    background: var(--console-panel);
+    border: 1px solid var(--console-line);
+    border-radius: 9px;
+    padding: 7px 10px;
+  }
+  .fx-stat .k {
+    font-size: 6.5px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: var(--console-dim);
+    margin-bottom: 2px;
+    white-space: nowrap;
+  }
+  .fx-stat .v { font-size: 12px; font-weight: 700; color: #ffffff; }
+  .fx-stat .v.g  { color: var(--ok); }
+  .fx-stat .v.a  { color: var(--amber); }
+  @media (prefers-reduced-motion: reduce) {
+    .fx-row { animation: none; opacity: 1; }
+    .v-fraud { animation: none; }
+    .fx-live .d { animation: none; }
+    .project-card, .project-card:hover { transform: none; transition: none; }
+  }
+
+  /* ============ PROJECT INFO ============ */
+  .info { padding: 26px 28px 28px; }
+  .info-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 6px;
+  }
+  .info h2 {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+  }
+  .info h2 .icon { font-size: 18px; }
+  .tagline {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.2px;
+  }
+  .desc {
+    font-size: 14.5px;
+    line-height: 1.6;
+    color: var(--ink-soft);
+    margin: 10px 0 18px;
+  }
+  .desc b { color: var(--ink); font-weight: 600; }
+
+  .tech-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 10px;
+  }
+  .tech-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 22px;
+  }
+  .chip {
+    font-size: 12px;
+    font-weight: 500;
+    padding: 5px 12px;
+    border-radius: 999px;
+    background: var(--chip-bg);
+    border: 1px solid var(--chip-border);
+    color: var(--ink);
+  }
+
+  .links { display: flex; gap: 10px; flex-wrap: wrap; }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13.5px;
+    font-weight: 600;
+    text-decoration: none;
+    padding: 10px 18px;
+    border-radius: 10px;
+    transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+  }
+  .btn:active { transform: scale(0.97); }
+  .btn.primary {
+    background: var(--accent);
+    color: #ffffff;
+  }
+  .btn.primary:hover { background: var(--accent-deep); }
+  .btn.ghost {
+    background: transparent;
+    color: var(--ink);
+    border: 1.5px solid var(--border);
+  }
+  .btn.ghost:hover { border-color: var(--accent); }
+  .btn svg { width: 16px; height: 16px; }
+
+  @media (max-width: 520px) {
+    .fx-stats { flex-wrap: wrap; }
+    .fx-stat { flex: 1 1 40%; }
+    .preview { height: auto; }
+    .info { padding: 22px 20px 24px; }
+  }
+
+  /* ===== Dark mode (driven by the portfolio theme toggle) ===== */
+  :root[data-theme="dark"] {
+    --page-bg: #14161c;
+    --ink: #f3f4f8;
+    --ink-soft: #a7adc2;
+    --card-bg: #1b1e27;
+    --border: #2b2f3b;
+    --chip-bg: #232734;
+    --chip-border: #363c4b;
+    --shadow: 0 18px 45px rgba(0, 0, 0, 0.55), 0 4px 12px rgba(0, 0, 0, 0.4);
+  }
+  :root[data-theme="dark"] body { background: var(--page-bg); }
+  :root[data-theme="dark"] .titlebar {
+    background: linear-gradient(#20242f, #171a22);
+  }
+  :root[data-theme="dark"] .url-bar {
+    background: #12141b;
+    border-color: #2b2f3b;
+  }
+
+  /* ===== embedded alignment + Farsi info (i18n-embed) ===== */
+  body { align-items: flex-start; padding-top: 28px; padding-bottom: 28px; }
+  body.lang-fa .info { direction: rtl; text-align: right; font-family: 'Vazirmatn', 'Inter', sans-serif; }
+  body.lang-fa .info h2 { font-family: 'Vazirmatn', 'Inter', sans-serif; }
+</style>
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<article class="project-card">
+
+  <!-- macOS browser chrome -->
+  <div class="titlebar">
+    <div class="traffic-lights" aria-hidden="true">
+      <div class="dot red"><span>×</span></div>
+      <div class="dot yellow"><span>−</span></div>
+      <div class="dot green"><span>+</span></div>
+    </div>
+    <div class="url-bar">
+      <span class="lock">🔒</span>
+      <span class="url"><b>fraudflux.local</b>/monitor — concept UI</span>
+    </div>
+  </div>
+
+  <!-- Window content: imaginary live transaction monitor -->
+  <div class="preview" aria-label="Concept preview of a FraudFlux live transaction monitor">
+    <div class="fx-head">
+      <div class="fx-brand">💳 FraudFlux</div>
+      <div class="fx-live"><span class="d"></span> SCORING STREAM</div>
+    </div>
+
+    <div class="fx-feed">
+      <div class="fx-cols">
+        <span class="c-id">TXN</span><span class="c-amt">AMOUNT</span><span class="c-pr">P(FRAUD)</span><span class="c-v">VERDICT</span>
+      </div>
+      <div class="fx-row"><span class="c-id">#56 731</span><span class="c-amt">€ 42.80</span><span class="c-pr">0.001</span><span class="c-v v-ok">✓ NOT FRAUD</span></div>
+      <div class="fx-row"><span class="c-id">#56 732</span><span class="c-amt">€ 129.99</span><span class="c-pr">0.034</span><span class="c-v v-ok">✓ NOT FRAUD</span></div>
+      <div class="fx-row hot"><span class="c-id">#56 733</span><span class="c-amt">€ 1 899.00</span><span class="c-pr">0.967</span><span class="c-v v-fraud">⚠ FRAUD</span></div>
+      <div class="fx-row"><span class="c-id">#56 734</span><span class="c-amt">€ 8.40</span><span class="c-pr">0.000</span><span class="c-v v-ok">✓ NOT FRAUD</span></div>
+      <div class="fx-row"><span class="c-id">#56 735</span><span class="c-amt">€ 76.12</span><span class="c-pr">0.089</span><span class="c-v v-ok">✓ NOT FRAUD</span></div>
+    </div>
+
+    <div class="fx-stats">
+      <div class="fx-stat"><div class="k">MODEL</div><div class="v" style="font-size:9.5px; padding-top:2px;">RANDOM FOREST</div></div>
+      <div class="fx-stat"><div class="k">RECALL</div><div class="v g">81.05%</div></div>
+      <div class="fx-stat"><div class="k">PRECISION</div><div class="v g">80.21%</div></div>
+      <div class="fx-stat"><div class="k">THRESHOLD</div><div class="v a">0.15</div></div>
+    </div>
+  </div>
+
+  <!-- Project info -->
+  <div class="info">
+    <div class="info-head">
+      <h2><span class="icon">💳</span> FraudFlux</h2>
+      <span class="tagline" data-fa="یک هشدارِ اشتباه هزینه‌اش یک تماس است؛ یک تقلبِ ازدست‌رفته، حسابِ یک نفر.">A false alarm costs a phone call. A missed fraud costs someone's account.</span>
+    </div>
+    <p class="desc" data-fa="یک خط‌لولهٔ سرتاسریِ تشخیص تقلب، آموزش‌دیده روی ۲۸۴٬۸۰۷ تراکنش واقعیِ کارت اعتباری (۰٫۱۷۲٪ تقلب). چهار مدلِ کاندید با جاروبِ آستانه به‌ازای هر مدل مقایسه شدند — و نتیجهٔ کلیدی یک تغییرِ نظر است: رویکردِ صرفاً یادآوری‌محور مدلی با ۶۲۹ هشدارِ اشتباه تحویل می‌داد؛ مدلِ نهایی، جنگل تصادفی با آستانهٔ ۰٫۱۵، تعادلِ ۸۱٪ یادآوری با ۸۰٪ دقت و تنها ۱۹ هشدارِ اشتباه در ۵۶٬۷۴۶ تراکنشِ آزمون را برقرار می‌کند. پیش‌پردازشِ نشت‌ایمن و GridSearchCV با معیار F2 خط‌لوله را کامل می‌کنند.">
+      An end-to-end fraud detection pipeline trained on <b>284,807 real credit card
+      transactions</b> (0.172% fraud). Four candidate models were compared with per-model
+      threshold sweeps — and the headline result is a <b>change of mind</b>: pure
+      recall-first would have shipped a model with 629 false alarms; the deployed
+      <b>Random Forest at threshold 0.15</b> balances <b>81% recall with 80% precision</b>
+      and only 19 false alarms across 56,746 test transactions. Leakage-safe preprocessing
+      (dedupe before split, stratified sampling, selective scaling) and an F2-scored
+      GridSearchCV round out the pipeline.
+    </p>
+
+    <div class="tech-label" data-fa="ساخته‌شده با">Built with</div>
+    <div class="tech-chips">
+      <span class="chip">Python</span>
+      <span class="chip">scikit-learn</span>
+      <span class="chip">pandas</span>
+      <span class="chip">NumPy</span>
+      <span class="chip">Random Forest</span>
+      <span class="chip">GridSearchCV</span>
+      <span class="chip">Threshold Tuning</span>
+    </div>
+
+    <div class="links">
+      <a class="btn primary" href="https://github.com/imgigin2003/FraudFlux" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.55 0-.27-.01-1.17-.02-2.12-3.2.7-3.88-1.36-3.88-1.36-.52-1.33-1.28-1.68-1.28-1.68-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.72-1.54-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.28 1.18-3.09-.12-.29-.51-1.46.11-3.04 0 0 .96-.31 3.15 1.18a10.9 10.9 0 0 1 5.74 0c2.19-1.49 3.15-1.18 3.15-1.18.62 1.58.23 2.75.11 3.04.74.81 1.18 1.83 1.18 3.09 0 4.42-2.7 5.39-5.27 5.68.41.36.78 1.06.78 2.14 0 1.54-.02 2.79-.02 3.17 0 .31.21.67.8.55A11.51 11.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/></svg>
+        <span data-fa="مخزن گیت‌هاب">GitHub Repo</span>
+      </a>
+      <a class="btn ghost" href="https://github.com/imgigin2003/FraudFlux#-the-problem-with-recall-over-precision-always" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        <span data-fa="مقایسهٔ مدل‌ها">The Model Comparison</span>
+      </a>
+    </div>
+  </div>
+
+</article>
+
+<script>
+(function () {
+  var root = document.documentElement,
+    body = document.body;
+  function apply() {
+    var fa = root.getAttribute("lang") === "fa";
+    body.classList.toggle("lang-fa", fa);
+    var els = document.querySelectorAll("[data-fa]");
+    for (var i = 0; i < els.length; i++) {
+      var el = els[i];
+      if (el.getAttribute("data-en-html") === null) {
+        el.setAttribute("data-en-html", el.innerHTML);
+      }
+      el.innerHTML = fa ? el.getAttribute("data-fa") : el.getAttribute("data-en-html");
+    }
+  }
+  new MutationObserver(apply).observe(root, { attributes: true, attributeFilter: ["lang"] });
+  apply();
+})();
+</script>
+
+</body>
+</html>

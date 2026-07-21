@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VeTCare — Project Card</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Vazirmatn:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --page-bg: #f6f7f2;
+    --ink: #241f33;
+    --ink-soft: #6b6580;
+    --card-bg: #ffffff;
+    --border: #e7e3f0;
+    --violet: #8b5cf6;
+    --violet-deep: #6d3fe0;
+    --violet-soft: #a78bfa;
+    --pink: #ec6aa8;
+    --lav-bg: #f6f3fc;
+    --chip-bg: #f4f0fb;
+    --chip-border: #e5ddf5;
+    --red: #ff5f57;
+    --yellow: #febc2e;
+    --green-dot: #28c840;
+    --shadow: 0 18px 45px rgba(36, 31, 51, 0.14), 0 4px 12px rgba(36, 31, 51, 0.08);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--page-bg);
+    font-family: 'Inter', system-ui, sans-serif;
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 48px 20px;
+  }
+
+  /* ============ THE CARD ============ */
+  .project-card {
+    width: 100%;
+    max-width: 680px;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease;
+  }
+  .project-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 28px 60px rgba(36, 31, 51, 0.18), 0 6px 16px rgba(36, 31, 51, 0.1);
+  }
+
+  /* ============ macOS TITLE BAR ============ */
+  .titlebar {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 16px;
+    background: linear-gradient(#fcfbfd, #f4f2f8);
+    border-bottom: 1px solid var(--border);
+  }
+  .traffic-lights { display: flex; gap: 8px; flex-shrink: 0; }
+  .dot {
+    width: 12px; height: 12px; border-radius: 50%;
+    border: 0.5px solid rgba(0,0,0,0.12);
+    position: relative;
+  }
+  .dot.red    { background: var(--red); }
+  .dot.yellow { background: var(--yellow); }
+  .dot.green  { background: var(--green-dot); }
+  .dot span {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 8px; font-weight: 700; color: rgba(0,0,0,0.5);
+    opacity: 0; transition: opacity 0.15s ease;
+    line-height: 1;
+  }
+  .traffic-lights:hover .dot span { opacity: 1; }
+
+  .url-bar {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    background: #f0edf6;
+    border: 1px solid #e5e1ee;
+    border-radius: 8px;
+    padding: 6px 12px;
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    min-width: 0;
+  }
+  .url-bar .lock { font-size: 10px; }
+  .url-bar .url {
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .url-bar .url b { color: var(--ink); font-weight: 600; }
+
+  /* ============ WINDOW CONTENT: RTL PetClinic hero ============ */
+  .preview {
+    height: 250px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    user-select: none;
+    font-family: 'Vazirmatn', 'Inter', sans-serif;
+    background: linear-gradient(135deg, #f2ecfb, #faf7fd 60%);
+  }
+  .top-strip {
+    height: 6px;
+    background: linear-gradient(90deg, var(--violet-soft), var(--violet));
+    flex-shrink: 0;
+  }
+  .pc-nav {
+    direction: rtl;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 16px;
+    background: #ffffff;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+  .pc-brand {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+  .pc-logo {
+    width: 24px; height: 24px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, var(--violet-soft), var(--violet));
+    color: #ffffff;
+    font-size: 12px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .pc-brand .t { font-weight: 900; font-size: 10.5px; line-height: 1.1; }
+  .pc-brand .s { font-size: 6.5px; color: var(--ink-soft); font-family: 'Inter', sans-serif; }
+  .pc-links {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    font-size: 8px;
+    font-weight: 700;
+    margin-right: 6px;
+  }
+  .pc-links .active {
+    background: var(--chip-bg);
+    color: var(--violet-deep);
+    padding: 4px 9px;
+    border-radius: 8px;
+  }
+  .pc-book {
+    margin-right: auto;
+    background: linear-gradient(135deg, var(--violet-soft), var(--violet));
+    color: #ffffff;
+    font-size: 8px;
+    font-weight: 700;
+    padding: 6px 13px;
+    border-radius: 10px;
+    white-space: nowrap;
+  }
+
+  .pc-hero {
+    direction: rtl;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 12px 20px;
+    min-height: 0;
+  }
+  .pc-copy {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    min-width: 0;
+  }
+  .pc-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: #ffffff;
+    border: 1px solid var(--border);
+    color: var(--ink-soft);
+    font-size: 6.5px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 999px;
+  }
+  .pc-copy h3 {
+    font-size: 15.5px;
+    font-weight: 900;
+    line-height: 1.5;
+    color: var(--ink);
+  }
+  .pc-copy h3 .g1 { color: var(--violet); }
+  .pc-copy h3 .g2 { color: var(--pink); }
+  .pc-copy p {
+    font-size: 7.5px;
+    color: var(--ink-soft);
+    line-height: 1.8;
+    font-weight: 500;
+  }
+  .pc-ctas { display: flex; gap: 7px; margin-top: 2px; }
+  .pc-cta1 {
+    background: linear-gradient(135deg, var(--violet-soft), var(--violet));
+    color: #ffffff;
+    font-size: 7.5px;
+    font-weight: 700;
+    padding: 6px 13px;
+    border-radius: 11px;
+    white-space: nowrap;
+  }
+  .pc-cta2 {
+    background: #ffffff;
+    border: 1px solid var(--border);
+    color: var(--ink);
+    font-size: 7.5px;
+    font-weight: 700;
+    padding: 6px 13px;
+    border-radius: 11px;
+    white-space: nowrap;
+  }
+  .pc-stats {
+    display: flex;
+    gap: 16px;
+    margin-top: 5px;
+  }
+  .pc-st { text-align: center; }
+  .pc-st .n { font-size: 10.5px; font-weight: 900; color: var(--violet-deep); }
+  .pc-st .l { font-size: 6px; font-weight: 700; color: var(--ink-soft); }
+
+  .pc-photo {
+    position: relative;
+    width: 158px;
+    height: 158px;
+    border-radius: 20px;
+    background:
+      radial-gradient(circle at 70% 25%, rgba(255,255,255,0.55), transparent 45%),
+      linear-gradient(160deg, #cdbdf2, #9d86d9 55%, #7d64c4);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 64px;
+    box-shadow: 0 10px 26px rgba(109, 63, 224, 0.25);
+  }
+  .pc-float {
+    position: absolute;
+    bottom: -8px;
+    left: -10px;
+    direction: rtl;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 6px 10px;
+    box-shadow: 0 6px 18px rgba(36, 31, 51, 0.14);
+  }
+  .pc-float .hrt {
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    background: #fdeef4;
+    color: var(--pink);
+    font-size: 9px;
+    display: flex; align-items: center; justify-content: center;
+    animation: beat 1.6s ease-in-out infinite;
+  }
+  @keyframes beat {
+    0%, 100% { transform: scale(1); }
+    12%      { transform: scale(1.25); }
+    24%      { transform: scale(1); }
+    36%      { transform: scale(1.18); }
+    48%      { transform: scale(1); }
+  }
+  .pc-float .ft { font-size: 7.5px; font-weight: 900; color: var(--ink); line-height: 1.3; }
+  .pc-float .fs { font-size: 6px; font-weight: 500; color: var(--ink-soft); }
+  @media (prefers-reduced-motion: reduce) {
+    .pc-float .hrt { animation: none; }
+    .project-card, .project-card:hover { transform: none; transition: none; }
+  }
+
+  /* ============ PROJECT INFO ============ */
+  .info { padding: 26px 28px 28px; }
+  .info-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 6px;
+  }
+  .info h2 {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+  }
+  .info h2 .icon { font-size: 18px; }
+  .tagline {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--violet);
+    letter-spacing: 0.2px;
+  }
+  .desc {
+    font-size: 14.5px;
+    line-height: 1.6;
+    color: var(--ink-soft);
+    margin: 10px 0 18px;
+  }
+  .desc b { color: var(--ink); font-weight: 600; }
+
+  .tech-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 10px;
+  }
+  .tech-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 22px;
+  }
+  .chip {
+    font-size: 12px;
+    font-weight: 500;
+    padding: 5px 12px;
+    border-radius: 999px;
+    background: var(--chip-bg);
+    border: 1px solid var(--chip-border);
+    color: var(--ink);
+  }
+
+  .links { display: flex; gap: 10px; flex-wrap: wrap; }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13.5px;
+    font-weight: 600;
+    text-decoration: none;
+    padding: 10px 18px;
+    border-radius: 10px;
+    transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+  }
+  .btn:active { transform: scale(0.97); }
+  .btn.primary {
+    background: linear-gradient(135deg, var(--violet-soft), var(--violet));
+    color: #ffffff;
+  }
+  .btn.primary:hover { background: var(--violet-deep); }
+  .btn.ghost {
+    background: transparent;
+    color: var(--ink);
+    border: 1.5px solid var(--border);
+  }
+  .btn.ghost:hover { border-color: var(--violet); }
+  .btn svg { width: 16px; height: 16px; }
+
+  @media (max-width: 560px) {
+    .pc-photo { display: none; }
+    .pc-links { display: none; }
+    .info { padding: 22px 20px 24px; }
+  }
+
+  /* ===== Dark mode (driven by the portfolio theme toggle) ===== */
+  :root[data-theme="dark"] {
+    --page-bg: #14161c;
+    --ink: #f3f4f8;
+    --ink-soft: #a7adc2;
+    --card-bg: #1b1e27;
+    --border: #2b2f3b;
+    --chip-bg: #232734;
+    --chip-border: #363c4b;
+    --shadow: 0 18px 45px rgba(0, 0, 0, 0.55), 0 4px 12px rgba(0, 0, 0, 0.4);
+  }
+  :root[data-theme="dark"] body { background: var(--page-bg); }
+  :root[data-theme="dark"] .titlebar {
+    background: linear-gradient(#20242f, #171a22);
+  }
+  :root[data-theme="dark"] .url-bar {
+    background: #12141b;
+    border-color: #2b2f3b;
+  }
+
+  /* ===== embedded alignment + Farsi info (i18n-embed) ===== */
+  body { align-items: flex-start; padding-top: 28px; padding-bottom: 28px; }
+  body.lang-fa .info { direction: rtl; text-align: right; font-family: 'Vazirmatn', 'Inter', sans-serif; }
+  body.lang-fa .info h2 { font-family: 'Vazirmatn', 'Inter', sans-serif; }
+</style>
+</head>
+<body>
+
+<article class="project-card">
+
+  <!-- macOS browser chrome -->
+  <div class="titlebar">
+    <div class="traffic-lights" aria-hidden="true">
+      <div class="dot red"><span>×</span></div>
+      <div class="dot yellow"><span>−</span></div>
+      <div class="dot green"><span>+</span></div>
+    </div>
+    <div class="url-bar">
+      <span class="lock">🔒</span>
+      <span class="url"><b>localhost:3001</b> — PetClinic</span>
+    </div>
+  </div>
+
+  <!-- Window content: RTL PetClinic hero miniature -->
+  <div class="preview" aria-label="Preview of the PetClinic veterinary landing page">
+    <div class="top-strip"></div>
+    <div class="pc-nav">
+      <div class="pc-brand">
+        <span class="pc-logo">🐾</span>
+        <div>
+          <div class="t">پت‌کلینیک</div>
+          <div class="s">PetClinic Veterinary</div>
+        </div>
+      </div>
+      <div class="pc-links">
+        <span class="active">خانه</span><span>خدمات</span><span>فروشگاه</span><span>نوبت‌دهی</span><span>پیگیری</span>
+      </div>
+      <div class="pc-book">رزرو نوبت</div>
+    </div>
+
+    <div class="pc-hero">
+      <div class="pc-copy">
+        <span class="pc-badge">❤️ بیش از ۱۵ سال تجربه مراقبت از حیوانات</span>
+        <h3>مراقبت <span class="g2">حرفه‌ای</span><br>از <span class="g1">بهترین دوست</span> شما</h3>
+        <p>تیم متخصص ما با عشق و تعهد، بهترین خدمات دامپزشکی را برای حیوانات خانگی شما ارائه می‌دهد.</p>
+        <div class="pc-ctas">
+          <span class="pc-cta1">📅 رزرو نوبت آنلاین ←</span>
+          <span class="pc-cta2">🛍 فروشگاه محصولات</span>
+        </div>
+        <div class="pc-stats">
+          <div class="pc-st"><div class="n">+۱۵</div><div class="l">سال تجربه</div></div>
+          <div class="pc-st"><div class="n">+۵۰۰۰</div><div class="l">حیوان درمان شده</div></div>
+          <div class="pc-st"><div class="n">۹۸٪</div><div class="l">رضایت مشتریان</div></div>
+        </div>
+      </div>
+
+      <div class="pc-photo">
+        🐶
+        <div class="pc-float">
+          <span class="hrt">❤</span>
+          <div>
+            <div class="ft">مراقبت ۲۴/۷</div>
+            <div class="fs">اورژانس دامپزشکی</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Project info -->
+  <div class="info">
+    <div class="info-head">
+      <h2><span class="icon">🐾</span> VeTCare — PetClinic</h2>
+      <span class="tagline" data-fa="نوبت بگیر. برای حیوان خانگی‌ات خرید کن. همه‌چیز را پیگیری کن.">Book appointments. Shop for your pet. Track everything.</span>
+    </div>
+    <p class="desc" data-fa="یک اپلیکیشنِ فول‌استکِ دوزبانه و کاملاً راست‌به‌چپ که کلینیک دامپزشکی و فروشگاه حیوانات خانگی را یک‌جا جمع می‌کند: یک ویزاردِ نوبت‌دهیِ سه‌مرحله‌ای روی تقویم جلالی، فروشگاهی با سبد خرید و پرداخت، و کدهای رهگیریِ شش‌کاراکتری که هم سفارش‌ها و هم نوبت‌ها را در یک خط‌زمانیِ وضعیت دنبال می‌کنند. پنل مدیریت، محصولات (با آپلود تصویر)، آمار درآمد و وضعیت‌ها را مدیریت می‌کند — همه بر پایهٔ یک API تمیزِ Express روی MongoDB Atlas.">
+      A bilingual, fully <b>RTL Persian</b> veterinary clinic and pet store in one full-stack
+      app: a <b>3-step booking wizard</b> on the Persian <b>Jalali calendar</b>, a product
+      shop with cart and checkout, and <b>6-character tracking codes</b> that follow both
+      orders and appointments through a visual status timeline. An admin panel manages
+      products (with image upload), revenue stats, and statuses — all backed by a clean
+      Express API over MongoDB Atlas.
+    </p>
+
+    <div class="tech-label" data-fa="ساخته‌شده با">Built with</div>
+    <div class="tech-chips">
+      <span class="chip">React 19</span>
+      <span class="chip">Vite</span>
+      <span class="chip">Tailwind CSS</span>
+      <span class="chip">shadcn/ui</span>
+      <span class="chip">Framer Motion</span>
+      <span class="chip">TanStack Query</span>
+      <span class="chip">Express 5</span>
+      <span class="chip">MongoDB Atlas</span>
+      <span class="chip">Multer</span>
+    </div>
+
+    <div class="links">
+      <a class="btn primary" href="https://github.com/imgigin2003/VeTCare" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.55 0-.27-.01-1.17-.02-2.12-3.2.7-3.88-1.36-3.88-1.36-.52-1.33-1.28-1.68-1.28-1.68-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.72-1.54-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.28 1.18-3.09-.12-.29-.51-1.46.11-3.04 0 0 .96-.31 3.15 1.18a10.9 10.9 0 0 1 5.74 0c2.19-1.49 3.15-1.18 3.15-1.18.62 1.58.23 2.75.11 3.04.74.81 1.18 1.83 1.18 3.09 0 4.42-2.7 5.39-5.27 5.68.41.36.78 1.06.78 2.14 0 1.54-.02 2.79-.02 3.17 0 .31.21.67.8.55A11.51 11.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/></svg>
+        <span data-fa="مخزن گیت‌هاب">GitHub Repo</span>
+      </a>
+      <a class="btn ghost" href="https://github.com/imgigin2003/VeTCare#️-api-routes" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+        <span data-fa="مرجع API">API Reference</span>
+      </a>
+    </div>
+  </div>
+
+</article>
+
+<script>
+(function () {
+  var root = document.documentElement,
+    body = document.body;
+  function apply() {
+    var fa = root.getAttribute("lang") === "fa";
+    body.classList.toggle("lang-fa", fa);
+    var els = document.querySelectorAll("[data-fa]");
+    for (var i = 0; i < els.length; i++) {
+      var el = els[i];
+      if (el.getAttribute("data-en-html") === null) {
+        el.setAttribute("data-en-html", el.innerHTML);
+      }
+      el.innerHTML = fa ? el.getAttribute("data-fa") : el.getAttribute("data-en-html");
+    }
+  }
+  new MutationObserver(apply).observe(root, { attributes: true, attributeFilter: ["lang"] });
+  apply();
+})();
+</script>
+
+</body>
+</html>
