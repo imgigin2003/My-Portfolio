@@ -91,6 +91,8 @@ function applyLanguage(lang) {
   if (langToggle) langToggle.textContent = isFa ? "EN" : "FA";
   applyLangToFrames(lang);
   localStorage.setItem("lang", lang);
+  // card text lengths differ between languages — re-measure frame heights
+  setTimeout(resizeFrames, 80);
 }
 
 if (langToggle) {
@@ -107,30 +109,21 @@ applyLanguage(localStorage.getItem("lang") || "en");
 const myDate = document.querySelector("#datee");
 myDate.innerHTML = new Date().getFullYear();
 
-// ===================== Size the project cards equally =====================
-// Measure every card, then give all frames the same height (the tallest one)
-// so the grid reads as a set of matching windows with no inner scrollbars.
+// ===================== Size each project card to its own height =====================
+// Every frame hugs its own card — heights can differ; the grid is
+// top-aligned (align-items: start), so it reads as a natural masonry.
 function resizeFrames() {
-  let max = 0;
-
   projectFrames.forEach((frame) => {
     try {
       const doc = frame.contentDocument || frame.contentWindow.document;
-      const card = doc.querySelector(".project-card") || doc.body;
-      if (card && card.offsetHeight > max) max = card.offsetHeight;
+      if (doc && doc.body && doc.body.scrollHeight > 0) {
+        // scrollHeight already includes the card's embed padding
+        frame.style.height = doc.body.scrollHeight + "px";
+      }
     } catch (e) {
       /* not ready — skip for now */
     }
   });
-
-  if (max > 0) {
-    // cards are top-aligned inside their frame with 28px padding top & bottom,
-    // so the frame needs the tallest card plus that padding
-    const h = max + 56 + "px";
-    projectFrames.forEach((frame) => {
-      frame.style.height = h;
-    });
-  }
 }
 
 projectFrames.forEach((frame) => {

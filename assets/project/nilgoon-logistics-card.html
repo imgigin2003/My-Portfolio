@@ -23,20 +23,18 @@
     --red: #ff5f57;
     --yellow: #febc2e;
     --green-dot: #28c840;
-    --shadow: 0 18px 45px rgba(23, 37, 31, 0.14), 0 4px 12px rgba(23, 37, 31, 0.08);
+    --shadow: 0 10px 26px rgba(23, 37, 31, 0.13), 0 3px 8px rgba(23, 37, 31, 0.07);
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
   body {
-    background: var(--page-bg);
+    background: transparent;
     font-family: 'Inter', system-ui, sans-serif;
     color: var(--ink);
     display: flex;
-    align-items: center;
     justify-content: center;
-    min-height: 100vh;
-    padding: 48px 20px;
+    padding: 10px 12px 36px;
   }
 
   /* ============ THE CARD ============ */
@@ -52,7 +50,7 @@
   }
   .project-card:hover {
     transform: translateY(-6px);
-    box-shadow: 0 28px 60px rgba(23, 37, 31, 0.18), 0 6px 16px rgba(23, 37, 31, 0.1);
+    box-shadow: 0 14px 32px rgba(23, 37, 31, 0.17), 0 4px 10px rgba(23, 37, 31, 0.09);
   }
 
   /* ============ macOS TITLE BAR ============ */
@@ -319,30 +317,16 @@
     .info { padding: 22px 20px 24px; }
   }
 
-  /* ===== Dark mode (driven by the portfolio theme toggle) ===== */
-  :root[data-theme="dark"] {
-    --page-bg: #14161c;
-    --ink: #f3f4f8;
-    --ink-soft: #a7adc2;
-    --card-bg: #1b1e27;
-    --border: #2b2f3b;
-    --chip-bg: #232734;
-    --chip-border: #363c4b;
-    --shadow: 0 18px 45px rgba(0, 0, 0, 0.55), 0 4px 12px rgba(0, 0, 0, 0.4);
+  /* ============ FA LANGUAGE SUPPORT ============ */
+  .fa-only { display: none; }
+  html[lang="fa"] .en-only { display: none; }
+  html[lang="fa"] .fa-only { display: revert; }
+  html[lang="fa"] .info {
+    direction: rtl;
+    font-family: 'Vazirmatn', 'Inter', system-ui, sans-serif;
   }
-  :root[data-theme="dark"] body { background: var(--page-bg); }
-  :root[data-theme="dark"] .titlebar {
-    background: linear-gradient(#20242f, #171a22);
-  }
-  :root[data-theme="dark"] .url-bar {
-    background: #12141b;
-    border-color: #2b2f3b;
-  }
-
-  /* ===== embedded alignment + Farsi info (i18n-embed) ===== */
-  body { align-items: flex-start; padding-top: 28px; padding-bottom: 28px; }
-  body.lang-fa .info { direction: rtl; text-align: right; font-family: 'Vazirmatn', 'Inter', sans-serif; }
-  body.lang-fa .info h2 { font-family: 'Vazirmatn', 'Inter', sans-serif; }
+  html[lang="fa"] .desc { line-height: 1.95; }
+  html[lang="fa"] .tech-label { letter-spacing: 0; }
 </style>
 </head>
 <body>
@@ -391,17 +375,18 @@
   <div class="info">
     <div class="info-head">
       <h2><span class="icon">🚚</span> Nilgoon Logistics</h2>
-      <span class="tagline" data-fa="یک شرکتِ باربریِ ۶۰ساله، برای نخستین‌بار آنلاین.">A 60-year-old freight company, online for the first time.</span>
+      <span class="tagline"><span class="en-only">A 60-year-old freight company, online for the first time.</span><span class="fa-only">یک شرکت باربری ۶۰ ساله، برای اولین بار آنلاین.</span></span>
     </div>
-    <p class="desc" data-fa="یک سایتِ فرودِ تولیدی برای یک مشتریِ واقعی — باربری نیلگون خلیج فارس، شرکتی در کرمانشاه که از سال ۱۳۴۰ فعال است. طراحیِ کاملاً راست‌به‌چپِ فارسی با بخش‌هایی برای خدمات، نظرات مشتریان و ثبت بازخورد، به‌همراه زیرساختِ سئو (نقشهٔ سایت، robots، صفحهٔ ۴۰۴ سفارشی) — منتشرشده روی دامنهٔ اختصاصی از طریق GitHub Pages.">
+    <p class="desc en-only">
       A production landing site built for a real client — <b>Nilgoon Persian Gulf
       Freight</b>, a Kermanshah freight company operating since 1961. Fully
       <b>right-to-left Persian</b> design with sections for services, customer
       testimonials, and a feedback flow, plus <b>SEO groundwork</b> (sitemap, robots,
       custom 404) — live on a custom domain via GitHub Pages.
     </p>
+    <p class="desc fa-only">وب‌سایت لندینگ حرفه‌ای ساخته‌شده برای یک مشتری واقعی — <b>باربری نیلگون خلیج فارس</b>، شرکت باربری کرمانشاه با فعالیت از سال ۱۳۴۰. طراحی کاملاً <b>راست‌به‌چپ فارسی</b> با بخش‌های خدمات، نظرات مشتریان و ثبت بازخورد، به‌همراه <b>زیرساخت سئو</b> (سایت‌مپ، robots و صفحه ۴۰۴ سفارشی) — روی دامنه اختصاصی با GitHub Pages در دسترس است.</p>
 
-    <div class="tech-label" data-fa="ساخته‌شده با">Built with</div>
+    <div class="tech-label"><span class="en-only">Built with</span><span class="fa-only">ساخته‌شده با</span></div>
     <div class="tech-chips">
       <span class="chip">HTML / CSS / JS</span>
       <span class="chip">RTL Layout</span>
@@ -414,37 +399,16 @@
     <div class="links">
       <a class="btn primary" href="https://nilgoonlogistics.ir" target="_blank" rel="noopener">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-        <span data-fa="مشاهدهٔ سایت">Live Site</span>
+        <span class="en-only">Live Site</span><span class="fa-only">مشاهده سایت</span>
       </a>
       <a class="btn ghost" href="https://github.com/imgigin2003/logistics" target="_blank" rel="noopener">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.55 0-.27-.01-1.17-.02-2.12-3.2.7-3.88-1.36-3.88-1.36-.52-1.33-1.28-1.68-1.28-1.68-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.72-1.54-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.28 1.18-3.09-.12-.29-.51-1.46.11-3.04 0 0 .96-.31 3.15 1.18a10.9 10.9 0 0 1 5.74 0c2.19-1.49 3.15-1.18 3.15-1.18.62 1.58.23 2.75.11 3.04.74.81 1.18 1.83 1.18 3.09 0 4.42-2.7 5.39-5.27 5.68.41.36.78 1.06.78 2.14 0 1.54-.02 2.79-.02 3.17 0 .31.21.67.8.55A11.51 11.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/></svg>
-        <span data-fa="گیت‌هاب">GitHub</span>
+        <span class="en-only">GitHub</span><span class="fa-only">گیت‌هاب</span>
       </a>
     </div>
   </div>
 
 </article>
-
-<script>
-(function () {
-  var root = document.documentElement,
-    body = document.body;
-  function apply() {
-    var fa = root.getAttribute("lang") === "fa";
-    body.classList.toggle("lang-fa", fa);
-    var els = document.querySelectorAll("[data-fa]");
-    for (var i = 0; i < els.length; i++) {
-      var el = els[i];
-      if (el.getAttribute("data-en-html") === null) {
-        el.setAttribute("data-en-html", el.innerHTML);
-      }
-      el.innerHTML = fa ? el.getAttribute("data-fa") : el.getAttribute("data-en-html");
-    }
-  }
-  new MutationObserver(apply).observe(root, { attributes: true, attributeFilter: ["lang"] });
-  apply();
-})();
-</script>
 
 </body>
 </html>

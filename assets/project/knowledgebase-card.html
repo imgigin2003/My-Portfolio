@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KnowledgeBase — Project Card</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --page-bg: #f6f7f2;
+    --ink: #0f172a;
+    --ink-soft: #64748b;
+    --card-bg: #ffffff;
+    --border: #e2e8f0;
+    --slate-deep: #1e293b;
+    --blue: #3b82f6;
+    --blue-pale: #dbeafe;
+    --green: #22a55b;
+    --green-pale: #dcf5e6;
+    --orange: #ea7a3b;
+    --orange-pale: #fdeadd;
+    --focus-ring: #f0a94a;
+    --chip-bg: #f1f5f9;
+    --chip-border: #e2e8f0;
+    --red: #ff5f57;
+    --yellow: #febc2e;
+    --green-dot: #28c840;
+    --shadow: 0 10px 26px rgba(15, 23, 42, 0.13), 0 3px 8px rgba(15, 23, 42, 0.07);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: transparent;
+    font-family: 'Inter', system-ui, sans-serif;
+    color: var(--ink);
+    display: flex;
+    justify-content: center;
+    padding: 10px 12px 36px;
+  }
+
+  /* ============ THE CARD ============ */
+  .project-card {
+    width: 100%;
+    max-width: 680px;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease;
+  }
+  .project-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 14px 32px rgba(15, 23, 42, 0.17), 0 4px 10px rgba(15, 23, 42, 0.09);
+  }
+
+  /* ============ macOS TITLE BAR ============ */
+  .titlebar {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 16px;
+    background: linear-gradient(#fbfcfd, #f1f4f8);
+    border-bottom: 1px solid var(--border);
+  }
+  .traffic-lights { display: flex; gap: 8px; flex-shrink: 0; }
+  .dot {
+    width: 12px; height: 12px; border-radius: 50%;
+    border: 0.5px solid rgba(0,0,0,0.12);
+    position: relative;
+  }
+  .dot.red    { background: var(--red); }
+  .dot.yellow { background: var(--yellow); }
+  .dot.green  { background: var(--green-dot); }
+  .dot span {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 8px; font-weight: 700; color: rgba(0,0,0,0.5);
+    opacity: 0; transition: opacity 0.15s ease;
+    line-height: 1;
+  }
+  .traffic-lights:hover .dot span { opacity: 1; }
+
+  .url-bar {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    background: #eef1f5;
+    border: 1px solid #e3e8ef;
+    border-radius: 8px;
+    padding: 6px 12px;
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    min-width: 0;
+  }
+  .url-bar .lock { font-size: 10px; }
+  .url-bar .url {
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .url-bar .url b { color: var(--ink); font-weight: 600; }
+
+  /* ============ WINDOW CONTENT: mini KnowledgeBase dashboard ============ */
+  .preview {
+    display: flex;
+    height: 250px;
+    background: #ffffff;
+    overflow: hidden;
+    user-select: none;
+  }
+  .kb-sidebar {
+    width: 158px;
+    border-right: 1px solid var(--border);
+    padding: 14px 12px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .kb-brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+  .kb-logo {
+    width: 24px; height: 24px;
+    background: var(--slate-deep);
+    border-radius: 7px;
+    color: #ffffff;
+    font-size: 11px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .kb-brand .t { font-weight: 700; font-size: 11.5px; line-height: 1.15; }
+  .kb-brand .s { font-size: 7.5px; color: var(--ink-soft); }
+  .kb-search {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 5px 9px;
+    font-size: 8.5px;
+    color: var(--ink-soft);
+  }
+  .kb-nav {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 9.5px;
+    font-weight: 600;
+    padding: 6px 9px;
+    border-radius: 8px;
+    border: 1.5px solid transparent;
+    color: var(--ink);
+  }
+  .kb-nav.active {
+    border-color: var(--focus-ring);
+    background: #f8fafc;
+  }
+  .kb-new {
+    margin-top: auto;
+    background: var(--slate-deep);
+    color: #ffffff;
+    font-size: 9px;
+    font-weight: 600;
+    text-align: center;
+    padding: 8px 0;
+    border-radius: 8px;
+  }
+
+  .kb-main {
+    flex: 1;
+    padding: 16px 18px;
+    min-width: 0;
+    background: #fbfcfe;
+  }
+  .kb-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 3px;
+  }
+  .kb-title {
+    font-size: 15px;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+  }
+  .kb-create {
+    background: var(--slate-deep);
+    color: #ffffff;
+    font-size: 8.5px;
+    font-weight: 600;
+    padding: 6px 11px;
+    border-radius: 7px;
+    white-space: nowrap;
+  }
+  .kb-sub {
+    font-size: 8.5px;
+    color: var(--ink-soft);
+    margin-bottom: 12px;
+  }
+
+  .kb-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 9px;
+    margin-bottom: 11px;
+  }
+  .kb-stat {
+    background: #ffffff;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 9px 11px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+  }
+  .kb-stat .k { font-size: 8px; font-weight: 600; color: var(--ink-soft); margin-bottom: 2px; white-space: nowrap; }
+  .kb-stat .v { font-size: 16px; font-weight: 800; }
+  .kb-stat.blue .v   { color: var(--blue); }
+  .kb-stat.green .v  { color: var(--green); }
+  .kb-stat.orange .v { color: var(--orange); }
+  .kb-ico {
+    width: 24px; height: 24px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px;
+    flex-shrink: 0;
+  }
+  .kb-stat.blue .kb-ico   { background: var(--blue-pale); }
+  .kb-stat.green .kb-ico  { background: var(--green-pale); }
+  .kb-stat.orange .kb-ico { background: var(--orange-pale); }
+
+  .kb-recent {
+    background: #ffffff;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 12px;
+  }
+  .kb-recent .rt {
+    font-size: 9.5px;
+    font-weight: 700;
+    margin-bottom: 7px;
+  }
+  .kb-row {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 8.5px;
+    color: var(--ink-soft);
+    padding: 4px 0;
+    border-top: 1px solid #f1f5f9;
+  }
+  .kb-row .pill {
+    margin-left: auto;
+    font-size: 7px;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 999px;
+  }
+  .pill.pub { background: var(--green-pale); color: var(--green); }
+  .pill.dft { background: var(--orange-pale); color: var(--orange); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .project-card, .project-card:hover { transform: none; transition: none; }
+  }
+
+  /* ============ PROJECT INFO ============ */
+  .info { padding: 26px 28px 28px; }
+  .info-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 6px;
+  }
+  .info h2 {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+  }
+  .info h2 .icon { font-size: 18px; }
+  .tagline {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--blue);
+    letter-spacing: 0.2px;
+  }
+  .desc {
+    font-size: 14.5px;
+    line-height: 1.6;
+    color: var(--ink-soft);
+    margin: 10px 0 18px;
+  }
+  .desc b { color: var(--ink); font-weight: 600; }
+
+  .tech-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 10px;
+  }
+  .tech-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 22px;
+  }
+  .chip {
+    font-size: 12px;
+    font-weight: 500;
+    padding: 5px 12px;
+    border-radius: 999px;
+    background: var(--chip-bg);
+    border: 1px solid var(--chip-border);
+    color: var(--ink);
+  }
+
+  .links { display: flex; gap: 10px; flex-wrap: wrap; }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13.5px;
+    font-weight: 600;
+    text-decoration: none;
+    padding: 10px 18px;
+    border-radius: 10px;
+    transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+  }
+  .btn:active { transform: scale(0.97); }
+  .btn.primary {
+    background: var(--slate-deep);
+    color: #ffffff;
+  }
+  .btn.primary:hover { background: #0f172a; }
+  .btn.ghost {
+    background: transparent;
+    color: var(--ink);
+    border: 1.5px solid var(--border);
+  }
+  .btn.ghost:hover { border-color: var(--blue); }
+  .btn svg { width: 16px; height: 16px; }
+
+  @media (max-width: 520px) {
+    .kb-sidebar { display: none; }
+    .preview { height: auto; }
+    .info { padding: 22px 20px 24px; }
+  }
+
+  /* ============ FA LANGUAGE SUPPORT ============ */
+  .fa-only { display: none; }
+  html[lang="fa"] .en-only { display: none; }
+  html[lang="fa"] .fa-only { display: revert; }
+  html[lang="fa"] .info {
+    direction: rtl;
+    font-family: 'Vazirmatn', 'Inter', system-ui, sans-serif;
+  }
+  html[lang="fa"] .desc { line-height: 1.95; }
+  html[lang="fa"] .tech-label { letter-spacing: 0; }
+</style>
+</head>
+<body>
+
+<article class="project-card">
+
+  <!-- macOS browser chrome -->
+  <div class="titlebar">
+    <div class="traffic-lights" aria-hidden="true">
+      <div class="dot red"><span>×</span></div>
+      <div class="dot yellow"><span>−</span></div>
+      <div class="dot green"><span>+</span></div>
+    </div>
+    <div class="url-bar">
+      <span class="lock">🔒</span>
+      <span class="url"><b>localhost:3001</b> — self-hosted</span>
+    </div>
+  </div>
+
+  <!-- Window content: mini KnowledgeBase dashboard -->
+  <div class="preview" aria-label="Preview of the KnowledgeBase dashboard">
+    <div class="kb-sidebar">
+      <div class="kb-brand">
+        <span class="kb-logo">📚</span>
+        <div>
+          <div class="t">KnowledgeBase</div>
+          <div class="s">Internal Documentation</div>
+        </div>
+      </div>
+      <div class="kb-search">🔍 Search articles…</div>
+      <div class="kb-nav active">🏠 Dashboard</div>
+      <div class="kb-nav">📋 Intern Tracking</div>
+      <div class="kb-nav">☑️ Task Manager</div>
+      <div class="kb-new">+ New Article</div>
+    </div>
+
+    <div class="kb-main">
+      <div class="kb-head">
+        <div class="kb-title">Knowledge Dashboard</div>
+        <div class="kb-create">+ Create Article</div>
+      </div>
+      <div class="kb-sub">Manage your internal documentation and knowledge base</div>
+
+      <div class="kb-stats">
+        <div class="kb-stat blue">
+          <div><div class="k">Total Articles</div><div class="v">24</div></div>
+          <div class="kb-ico">📖</div>
+        </div>
+        <div class="kb-stat green">
+          <div><div class="k">Published</div><div class="v">18</div></div>
+          <div class="kb-ico">📄</div>
+        </div>
+        <div class="kb-stat orange">
+          <div><div class="k">Drafts</div><div class="v">6</div></div>
+          <div class="kb-ico">✏️</div>
+        </div>
+      </div>
+
+      <div class="kb-recent">
+        <div class="rt">🕐 Recent Articles</div>
+        <div class="kb-row" style="border-top:none;">📄 Onboarding checklist <span class="pill pub">PUBLISHED</span></div>
+        <div class="kb-row">📄 Deployment runbook <span class="pill pub">PUBLISHED</span></div>
+        <div class="kb-row">📄 API style guide <span class="pill dft">DRAFT</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Project info -->
+  <div class="info">
+    <div class="info-head">
+      <h2><span class="icon">📚</span> KnowledgeBase</h2>
+      <span class="tagline"><span class="en-only">Your team's knowledge, on your own server.</span><span class="fa-only">دانش تیم شما، روی سرور خودتان.</span></span>
+    </div>
+    <p class="desc en-only">
+      A <b>self-hosted</b> knowledge management system for internal documentation — with an
+      article dashboard, intern tracking, and a task manager with <b>unlimited nested
+      subtasks</b> and rich filtering. Fully independent of cloud services: all data
+      persists in local JSON files via <b>lowdb</b>, and the whole app ships as a single
+      <b>Docker</b> container you can run on any machine.
+    </p>
+    <p class="desc fa-only">یک سیستم مدیریت دانش <b>سلف-هاست</b> برای مستندات داخلی — با داشبورد مقاله‌ها، پیگیری کارآموزها و مدیریت وظایف با <b>زیروظیفه‌های تودرتوی نامحدود</b> و فیلترهای متنوع. کاملاً مستقل از سرویس‌های ابری: همه داده‌ها در فایل‌های JSON محلی با <b>lowdb</b> ذخیره می‌شود و کل اپ در قالب یک کانتینر <b>Docker</b> روی هر ماشینی اجرا می‌شود.</p>
+
+    <div class="tech-label"><span class="en-only">Built with</span><span class="fa-only">ساخته‌شده با</span></div>
+    <div class="tech-chips">
+      <span class="chip">React 18</span>
+      <span class="chip">Vite</span>
+      <span class="chip">Tailwind CSS</span>
+      <span class="chip">shadcn/ui</span>
+      <span class="chip">Node.js</span>
+      <span class="chip">Express</span>
+      <span class="chip">lowdb</span>
+      <span class="chip">Docker</span>
+    </div>
+
+    <div class="links">
+      <a class="btn primary" href="https://github.com/imgigin2003/KnowledgeBase" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.55 0-.27-.01-1.17-.02-2.12-3.2.7-3.88-1.36-3.88-1.36-.52-1.33-1.28-1.68-1.28-1.68-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.72-1.54-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.28 1.18-3.09-.12-.29-.51-1.46.11-3.04 0 0 .96-.31 3.15 1.18a10.9 10.9 0 0 1 5.74 0c2.19-1.49 3.15-1.18 3.15-1.18.62 1.58.23 2.75.11 3.04.74.81 1.18 1.83 1.18 3.09 0 4.42-2.7 5.39-5.27 5.68.41.36.78 1.06.78 2.14 0 1.54-.02 2.79-.02 3.17 0 .31.21.67.8.55A11.51 11.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/></svg>
+        <span class="en-only">GitHub Repo</span><span class="fa-only">مخزن گیت‌هاب</span>
+      </a>
+      <a class="btn ghost" href="https://github.com/imgigin2003/KnowledgeBase#-knowledge-weave---complete-installation-and-setup-guide" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        <span class="en-only">Setup Guide</span><span class="fa-only">راهنمای نصب</span>
+      </a>
+    </div>
+  </div>
+
+</article>
+
+</body>
+</html>
