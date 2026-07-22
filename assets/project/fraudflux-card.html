@@ -32,6 +32,19 @@
     --shadow: 0 10px 26px rgba(26, 32, 48, 0.13), 0 3px 8px rgba(26, 32, 48, 0.07);
   }
 
+  /* ============ DARK MODE ============ */
+  html[data-theme="dark"] {
+    --ink: #e6e9f2;
+    --ink-soft: #98a1b8;
+    --card-bg: #14161f;
+    --border: #282c39;
+    --chip-bg: #20242f;
+    --chip-border: #343a49;
+    --shadow: 0 12px 30px rgba(0,0,0,0.6), 0 4px 10px rgba(0,0,0,0.45);
+  }
+  html[data-theme="dark"] .titlebar { background: linear-gradient(#1a1d26, #14161d); }
+  html[data-theme="dark"] .url-bar { background: #181b24; border-color: #282c39; }
+
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
   body {

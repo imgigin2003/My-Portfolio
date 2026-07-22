@@ -26,6 +26,19 @@
     --shadow: 0 10px 26px rgba(23, 37, 31, 0.13), 0 3px 8px rgba(23, 37, 31, 0.07);
   }
 
+  /* ============ DARK MODE ============ */
+  html[data-theme="dark"] {
+    --ink: #e6efe9;
+    --ink-soft: #93a89c;
+    --card-bg: #14201b;
+    --border: #26362e;
+    --chip-bg: #1e2c25;
+    --chip-border: #32463b;
+    --shadow: 0 12px 30px rgba(0,0,0,0.55), 0 4px 10px rgba(0,0,0,0.4);
+  }
+  html[data-theme="dark"] .titlebar { background: linear-gradient(#1a2721, #14201a); }
+  html[data-theme="dark"] .url-bar { background: #172420; border-color: #26362e; }
+
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
   body {
