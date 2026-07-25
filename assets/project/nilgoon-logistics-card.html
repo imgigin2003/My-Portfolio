@@ -38,6 +38,9 @@
   }
   html[data-theme="dark"] .titlebar { background: linear-gradient(#1a2721, #14201a); }
   html[data-theme="dark"] .url-bar { background: #172420; border-color: #26362e; }
+  /* preview (RTL landing) — hero is already dark; darken the light bars */
+  html[data-theme="dark"] .site-nav { background: #16211c; border-bottom-color: var(--border); }
+  html[data-theme="dark"] .stat-strip { background: #16211c; border-top-color: var(--border); }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
 

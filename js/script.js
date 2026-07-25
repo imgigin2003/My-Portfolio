@@ -110,8 +110,8 @@ const myDate = document.querySelector("#datee");
 myDate.innerHTML = new Date().getFullYear();
 
 // ===================== Size each project card to its own height =====================
-// Every frame hugs its own card — heights can differ; the grid is
-// top-aligned (align-items: start), so it reads as a natural masonry.
+// Every frame hugs its own card — heights can differ. The grid is
+// top-aligned (align-items: start), so each card keeps its natural height.
 function resizeFrames() {
   projectFrames.forEach((frame) => {
     try {
